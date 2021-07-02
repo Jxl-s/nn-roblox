@@ -5,14 +5,18 @@ do
 	Matrix.__sub = function(self, n)
 		local newMatrix = Matrix.new(self.rows, self.columns)
 		if type(n) == "number" then
-			newMatrix:Map(function(value, row, column)
-				return self.data[row][column] - n
-			end)
+			for row = 1, self.rows do
+				for column = 1, self.columns do
+					newMatrix.data[row][column] = self.data[row][column] - n
+				end
+			end
 		elseif getmetatable(n) == Matrix then
 			assert(self.rows == n.rows and self.columns == n.columns, string.format("sub: [%s, %s] does not match with [%s, %s]", self.rows, self.columns, n.rows, n.columns))
-			newMatrix:Map(function(value, row, column)
-				return self.data[row][column] - n.data[row][column]
-			end)
+			for row = 1, self.rows do
+				for column = 1, self.columns do
+					newMatrix.data[row][column] = self.data[row][column] - n.data[row][column]
+				end
+			end
 		end
 
 		return newMatrix
@@ -20,14 +24,18 @@ do
 	Matrix.__add = function(self, n)
 		local newMatrix = Matrix.new(self.rows, self.columns)
 		if type(n) == "number" then
-			newMatrix:Map(function(value, row, column)
-				return self.data[row][column] + n
-			end)
+			for row = 1, self.rows do
+				for column = 1, self.columns do
+					newMatrix.data[row][column] = self.data[row][column] + n
+				end
+			end
 		elseif getmetatable(n) == Matrix then
 			assert(self.rows == n.rows and self.columns == n.columns, string.format("add: [%s, %s] does not match with [%s, %s]", self.rows, self.columns, n.rows, n.columns))
-			newMatrix:Map(function(value, row, column)
-				return self.data[row][column] + n.data[row][column]
-			end)
+			for row = 1, self.rows do
+				for column = 1, self.columns do
+					newMatrix.data[row][column] = self.data[row][column] + n.data[row][column]
+				end
+			end
 		end
 
 		return newMatrix
@@ -35,14 +43,18 @@ do
 	Matrix.__mul = function(self, n)
 		local newMatrix = Matrix.new(self.rows, self.columns)
 		if type(n) == "number" then
-			newMatrix:Map(function(value, row, column)
-				return self.data[row][column] * n
-			end)
+			for row = 1, self.rows do
+				for column = 1, self.columns do
+					newMatrix.data[row][column] = self.data[row][column] * n
+				end
+			end
 		elseif getmetatable(n) == Matrix then
 			assert(self.rows == n.rows and self.columns == n.columns, string.format("mul: [%s, %s] does not match with [%s, %s]", self.rows, self.columns, n.rows, n.columns))
-			newMatrix:Map(function(value, row, column)
-				return self.data[row][column] * n.data[row][column]
-			end)
+			for row = 1, self.rows do
+				for column = 1, self.columns do
+					newMatrix.data[row][column] = self.data[row][column] * n.data[row][column]
+				end
+			end
 		end
 
 		return newMatrix
@@ -162,6 +174,22 @@ do
 			end
 		end
 		return transposed
+	end
+
+	function Matrix:SoftMax()
+		local matrixSum = 0
+		local newMatrix = self:Clone()
+		newMatrix:Map(function(x)
+			local exponential = math.exp(x)
+			matrixSum += exponential
+			return exponential
+		end)
+
+		newMatrix:Map(function(x)
+			return x / matrixSum
+		end)
+
+		return newMatrix
 	end
 end
 
