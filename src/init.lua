@@ -25,8 +25,11 @@ end
 NeuralNetwork.__index = NeuralNetwork
 
 function NeuralNetwork.new(settings)
-	settings.HiddenActivation = settings.HiddenActivation or "Sigmoid"
+	settings.HiddenActivation = settings.HiddenActivation or "LeakyReLU"
 	settings.OutputActivation = settings.OutputActivation or "Sigmoid"
+	settings.HiddenNodes = settings.HiddenNodes or 2
+	settings.HiddenLayers = settings.HiddenLayers or 1
+	settings.LearningRate = settings.LearningRate or 0.1
 
 	local self = setmetatable({}, NeuralNetwork)
 
